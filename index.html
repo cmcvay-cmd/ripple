@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ripple</title>
 <meta name="theme-color" content="#04141c">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -12,217 +12,311 @@
   --bg: #04141c;
   --ink: #e8f4f6;
   --accent: #7ee0d6;
-  --glass: rgba(255,255,255,0.06);
-  --border: rgba(126,224,214,0.25);
+  --glass: rgba(255,255,255,0.07);
+  --border: rgba(126,224,214,0.28);
+  --muted: rgba(232,244,246,0.55);
 }
 * { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
 body {
-  margin: 0;
   background: var(--bg);
   color: var(--ink);
   font-family: "Outfit", system-ui, sans-serif;
-  min-height: 100dvh;
+  overflow: hidden;
 }
 .water-field {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  overflow: hidden;
   z-index: 0;
+  overflow: hidden;
 }
 .drop {
   position: absolute;
-  top: -40px;
-  background: rgba(126,224,214,0.35);
+  top: -50px;
+  background: rgba(126,224,214,0.32);
   border-radius: 50%;
   animation: fall linear infinite;
 }
-@keyframes fall {
-  to { transform: translateY(110vh); opacity: 0.2; }
-}
-.wrap {
-  position: relative;
-  z-index: 1;
-  max-width: 420px;
-  margin: 0 auto;
-  padding: 24px 20px 80px;
-  min-height: 100dvh;
-}
+@keyframes fall { to { transform: translateY(110vh); opacity: 0.15; } }
+#app { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; }
+.screen { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.wrap { max-width: 480px; margin: 0 auto; padding: 20px 18px 40px; width: 100%; }
 .logo {
-  width: 140px;
-  height: 140px;
-  margin: 40px auto 24px;
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23e8f4f6" d="M50 8C50 8 22 42 22 62a28 28 0 0 0 56 0C78 42 50 8 50 8z"/><ellipse cx="40" cy="58" rx="6" ry="10" fill="%2304141c" opacity="0.3"/></svg>') center/contain no-repeat;
+  width: 120px; height: 120px; margin: 28px auto 16px;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23e8f4f6" d="M50 8C50 8 22 42 22 62a28 28 0 0 0 56 0C78 42 50 8 50 8z"/></svg>') center/contain no-repeat;
 }
-h1 { font-family: "Fraunces", serif; font-weight: 500; font-size: 42px; margin: 0 0 8px; }
-.sub { opacity: 0.7; margin: 0 0 28px; font-size: 15px; }
-.field { margin-bottom: 16px; }
-.field-label { display: block; font-size: 13px; opacity: 0.8; margin-bottom: 6px; letter-spacing: 0.04em; }
+h1 { font-family: "Fraunces", serif; font-weight: 500; font-size: 40px; margin: 0 0 6px; }
+.sub { opacity: 0.65; margin: 0 0 22px; font-size: 15px; }
+.field { margin-bottom: 14px; }
+.field-label { display: block; font-size: 12px; opacity: 0.75; margin-bottom: 5px; letter-spacing: 0.05em; text-transform: uppercase; }
 .glass-input, select.glass-input {
-  width: 100%;
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  color: var(--ink);
-  padding: 12px 14px;
-  font-size: 15px;
-  font-family: inherit;
-  outline: none;
+  width: 100%; background: var(--glass); border: 1px solid var(--border);
+  border-radius: 12px; color: var(--ink); padding: 12px 14px; font-size: 15px; font-family: inherit; outline: none;
 }
 .glass-input:focus { border-color: var(--accent); }
 .btn {
-  width: 100%;
-  margin-top: 8px;
-  background: var(--accent);
-  color: #04141c;
-  border: none;
-  border-radius: 14px;
-  padding: 14px;
-  font-size: 16px;
-  font-weight: 600;
-  font-family: inherit;
-  cursor: pointer;
+  width: 100%; margin-top: 6px; background: var(--accent); color: #04141c; border: none;
+  border-radius: 14px; padding: 14px; font-size: 16px; font-weight: 600; font-family: inherit; cursor: pointer;
 }
-.btn:disabled { opacity: 0.5; }
-.fine { font-size: 13px; opacity: 0.65; line-height: 1.45; margin-top: 20px; }
+.btn:disabled { opacity: 0.45; }
+.fine { font-size: 13px; opacity: 0.6; line-height: 1.45; margin-top: 18px; }
 #customModel { display: none; margin-top: 8px; }
+
+/* Chat */
+#chatScreen { display: none; height: 100%; }
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: rgba(4,20,28,0.6); backdrop-filter: blur(12px);
+}
+.topbar h2 { margin: 0; font-size: 17px; font-weight: 600; }
+.model-chip { font-size: 12px; opacity: 0.7; background: var(--glass); padding: 4px 10px; border-radius: 99px; }
+.messages {
+  flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px;
+}
+.msg {
+  max-width: 85%; padding: 12px 14px; border-radius: 16px; line-height: 1.45; font-size: 15px;
+  white-space: pre-wrap; word-break: break-word;
+}
+.msg.user { align-self: flex-end; background: rgba(126,224,214,0.18); border: 1px solid var(--border); }
+.msg.assistant { align-self: flex-start; background: var(--glass); border: 1px solid rgba(255,255,255,0.08); }
+.msg.thinking { font-style: italic; opacity: 0.7; font-size: 13px; }
+.composer {
+  display: flex; gap: 8px; padding: 12px 16px 20px; background: rgba(4,20,28,0.7); backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.composer textarea {
+  flex: 1; resize: none; min-height: 44px; max-height: 120px;
+  background: var(--glass); border: 1px solid var(--border); border-radius: 14px;
+  color: var(--ink); padding: 10px 14px; font-family: inherit; font-size: 15px; outline: none;
+}
+.send {
+  background: var(--accent); color: #04141c; border: none; border-radius: 14px;
+  width: 48px; font-weight: 700; font-size: 18px; cursor: pointer;
+}
+.send:disabled { opacity: 0.4; }
+.empty { text-align: center; opacity: 0.5; margin-top: 40px; }
 </style>
 </head>
 <body>
 <div class="water-field" id="water"></div>
-<div class="wrap">
-  <div class="logo"></div>
-  <p class="sub">Glass assistant</p>
-  <h1>Ripple</h1>
-  <p>Paste a key from xAI, OpenAI, Claude, Gemini, OpenRouter, or any OpenAI-style API. Chat stays locked until the key checks out.</p>
+<div id="app">
+  <!-- Setup -->
+  <div id="setupScreen" class="screen">
+    <div class="wrap">
+      <div class="logo"></div>
+      <p class="sub">Glass assistant</p>
+      <h1>Ripple</h1>
+      <p>Paste your OpenRouter key. Chat stays locked until the key checks out.</p>
+      <form id="unlock">
+        <label class="field">
+          <span class="field-label">Provider</span>
+          <select class="glass-input" id="provider">
+            <option value="openrouter">OpenRouter</option>
+            <option value="xai">xAI · Grok</option>
+            <option value="openai">OpenAI</option>
+            <option value="custom">Any OpenAI-compatible</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="field-label">API key</span>
+          <input class="glass-input" id="key" type="password" placeholder="sk-or-…" required minlength="8">
+        </label>
+        <label class="field">
+          <span class="field-label">Model</span>
+          <select class="glass-input" id="modelSelect">
+            <option value="meta/muse-spark-open">Muse Spark Open</option>
+            <option value="cognitivecomputations/dolphin-mistral-24b-venice-edition:free">Venice Uncensored (free)</option>
+            <option value="cohere/north-mini-code:free">North Mini Code (free)</option>
+            <option value="poolside/laguna-s-2.1:free">Laguna S 2.1 (free)</option>
+            <option value="custom">Custom model id</option>
+          </select>
+          <input class="glass-input" id="customModel" placeholder="e.g. meta/muse-spark-open">
+        </label>
+        <label class="field">
+          <span class="field-label">Base URL</span>
+          <input class="glass-input" id="baseUrl" value="https://openrouter.ai/api/v1">
+        </label>
+        <button class="btn" type="submit" id="go">Unlock Ripple</button>
+      </form>
+      <p class="fine">The key stays on this phone. Ripple sends it only with your requests.</p>
+    </div>
+  </div>
 
-  <form id="unlock" class="stack">
-    <label class="field">
-      <span class="field-label">Provider</span>
-      <select class="glass-input" id="provider">
-        <option value="openrouter">OpenRouter</option>
-        <option value="xai">xAI · Grok</option>
-        <option value="openai">OpenAI</option>
-        <option value="anthropic">Anthropic</option>
-        <option value="gemini">Gemini</option>
-        <option value="groq">Groq</option>
-        <option value="deepseek">DeepSeek</option>
-        <option value="mistral">Mistral</option>
-        <option value="custom">Any OpenAI-compatible</option>
-      </select>
-    </label>
-
-    <label class="field">
-      <span class="field-label">API key</span>
-      <input class="glass-input" id="key" type="password" placeholder="sk-or-…" required minlength="8">
-    </label>
-
-    <label class="field">
-      <span class="field-label">Model</span>
-      <select class="glass-input" id="modelSelect">
-        <option value="meta/muse-spark-open">Muse Spark Open</option>
-        <option value="cognitivecomputations/dolphin-mistral-24b-venice-edition:free">Venice Uncensored (free)</option>
-        <option value="cohere/north-mini-code:free">North Mini Code (free)</option>
-        <option value="poolside/laguna-s-2.1:free">Laguna S 2.1 (free)</option>
-        <option value="custom">Custom model id</option>
-      </select>
-      <input class="glass-input" id="customModel" placeholder="e.g. meta/muse-spark-open">
-    </label>
-
-    <label class="field">
-      <span class="field-label">Base URL</span>
-      <input class="glass-input" id="baseUrl" value="https://openrouter.ai/api/v1">
-    </label>
-
-    <button class="btn" type="submit" id="go">Unlock Ripple</button>
-  </form>
-
-  <p class="fine">The key stays on this phone. Ripple sends it only with your requests.</p>
+  <!-- Chat -->
+  <div id="chatScreen" class="screen">
+    <div class="topbar">
+      <h2>Ripple</h2>
+      <span class="model-chip" id="modelChip">model</span>
+    </div>
+    <div class="messages" id="messages">
+      <div class="empty">Ask anything. Streaming chat is live.</div>
+    </div>
+    <form class="composer" id="composer">
+      <textarea id="prompt" placeholder="Message…" rows="1"></textarea>
+      <button class="send" type="submit" id="sendBtn">↑</button>
+    </form>
+  </div>
 </div>
 
 <script>
-// Water drops
+// Water
 const water = document.getElementById('water');
-for (let i = 0; i < 12; i++) {
+for (let i = 0; i < 14; i++) {
   const d = document.createElement('span');
   d.className = 'drop';
-  d.style.left = (5 + i * 8) + '%';
-  d.style.animationDelay = (Math.random() * 4) + 's';
-  d.style.animationDuration = (5 + Math.random() * 3) + 's';
-  d.style.width = d.style.height = (14 + Math.random() * 20) + 'px';
+  d.style.left = (4 + i * 7) + '%';
+  d.style.animationDelay = (Math.random() * 5) + 's';
+  d.style.animationDuration = (5 + Math.random() * 3.5) + 's';
+  const s = 12 + Math.random() * 22;
+  d.style.width = d.style.height = s + 'px';
   water.appendChild(d);
 }
 
+const setupScreen = document.getElementById('setupScreen');
+const chatScreen = document.getElementById('chatScreen');
 const provider = document.getElementById('provider');
 const modelSelect = document.getElementById('modelSelect');
 const customModel = document.getElementById('customModel');
 const baseUrl = document.getElementById('baseUrl');
 const keyInput = document.getElementById('key');
+const messagesEl = document.getElementById('messages');
+const modelChip = document.getElementById('modelChip');
+const promptEl = document.getElementById('prompt');
+const sendBtn = document.getElementById('sendBtn');
 
 const urls = {
   openrouter: 'https://openrouter.ai/api/v1',
   xai: 'https://api.x.ai/v1',
-  openai: 'https://api.openai.com/v1',
-  anthropic: 'https://api.anthropic.com/v1',
-  gemini: 'https://generativelanguage.googleapis.com/v1beta/openai',
-  groq: 'https://api.groq.com/openai/v1',
-  deepseek: 'https://api.deepseek.com/v1',
-  mistral: 'https://api.mistral.ai/v1'
+  openai: 'https://api.openai.com/v1'
 };
+
+let config = null;
+let history = [];
+
+function loadConfig() {
+  try { return JSON.parse(localStorage.getItem('ripple-config')); } catch { return null; }
+}
+function saveConfig(c) { localStorage.setItem('ripple-config', JSON.stringify(c)); }
 
 provider.addEventListener('change', () => {
   baseUrl.value = urls[provider.value] || '';
-  if (provider.value === 'openrouter') {
-    keyInput.placeholder = 'sk-or-…';
-  } else {
-    keyInput.placeholder = 'API key';
-  }
 });
-
 modelSelect.addEventListener('change', () => {
   customModel.style.display = modelSelect.value === 'custom' ? 'block' : 'none';
 });
 
-document.getElementById('unlock').addEventListener('submit', async (e) => {
+document.getElementById('unlock').addEventListener('submit', (e) => {
   e.preventDefault();
-  const btn = document.getElementById('go');
-  btn.disabled = true;
-  btn.textContent = 'Checking…';
-
   const model = modelSelect.value === 'custom' ? customModel.value.trim() : modelSelect.value;
-  const config = {
+  if (!model) { alert('Enter a model id'); return; }
+  config = {
     provider: provider.value,
     key: keyInput.value.trim(),
     model,
     baseUrl: baseUrl.value.trim()
   };
+  saveConfig(config);
+  enterChat();
+});
 
-  if (!config.model) {
-    alert('Enter a model id');
-    btn.disabled = false;
-    btn.textContent = 'Unlock Ripple';
-    return;
-  }
+function enterChat() {
+  setupScreen.style.display = 'none';
+  chatScreen.style.display = 'flex';
+  modelChip.textContent = config.model.replace(/^.*\//, '');
+  promptEl.focus();
+}
 
-  // Store locally (same spirit as original)
-  localStorage.setItem('ripple-config', JSON.stringify(config));
+// Restore if already unlocked
+const saved = loadConfig();
+if (saved && saved.key) {
+  config = saved;
+  enterChat();
+}
 
-  // Quick check against the endpoint
+// Chat
+function addMsg(role, text, extraClass = '') {
+  const empty = messagesEl.querySelector('.empty');
+  if (empty) empty.remove();
+  const div = document.createElement('div');
+  div.className = 'msg ' + role + (extraClass ? ' ' + extraClass : '');
+  div.textContent = text;
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+  return div;
+}
+
+document.getElementById('composer').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const text = promptEl.value.trim();
+  if (!text || !config) return;
+  promptEl.value = '';
+  addMsg('user', text);
+  history.push({ role: 'user', content: text });
+
+  const assistantDiv = addMsg('assistant', '…');
+  sendBtn.disabled = true;
+
   try {
-    const r = await fetch(config.baseUrl + '/models', {
-      headers: { Authorization: 'Bearer ' + config.key }
+    const res = await fetch(config.baseUrl + '/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + config.key,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': location.origin,
+        'X-Title': 'Ripple'
+      },
+      body: JSON.stringify({
+        model: config.model,
+        messages: history,
+        stream: true
+      })
     });
-    if (!r.ok && r.status !== 404) throw new Error('Key check failed');
-  } catch (err) {
-    // Some providers don't have /models — still save and continue
-  }
 
-  btn.textContent = 'Unlocked';
-  setTimeout(() => {
-    alert('Key saved on this device.\nModel: ' + config.model + '\n\n(The full chat UI still needs the original app logic — this setup screen now works.)');
-    btn.disabled = false;
-    btn.textContent = 'Unlock Ripple';
-  }, 400);
+    if (!res.ok) {
+      const err = await res.text();
+      assistantDiv.textContent = 'Error: ' + res.status + ' ' + err.slice(0, 200);
+      sendBtn.disabled = false;
+      return;
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let full = '';
+    assistantDiv.textContent = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = decoder.decode(value, { stream: true });
+      for (const line of chunk.split('\n')) {
+        if (!line.startsWith('data: ')) continue;
+        const data = line.slice(6);
+        if (data === '[DONE]') continue;
+        try {
+          const json = JSON.parse(data);
+          const delta = json.choices?.[0]?.delta?.content || '';
+          if (delta) {
+            full += delta;
+            assistantDiv.textContent = full;
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+          }
+        } catch {}
+      }
+    }
+    history.push({ role: 'assistant', content: full });
+  } catch (err) {
+    assistantDiv.textContent = 'Network error: ' + err.message;
+  }
+  sendBtn.disabled = false;
+});
+
+promptEl.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    document.getElementById('composer').requestSubmit();
+  }
 });
 </script>
 </body>
