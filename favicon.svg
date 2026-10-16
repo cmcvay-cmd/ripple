@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Ripple">
+  <rect width="32" height="32" rx="7" fill="#04141c"/>
+  <path fill="#7ee0d6" d="M16 3.4C16 3.4 7.2 13.6 7.2 20.2a8.8 8.8 0 0 0 17.6 0C24.8 13.6 16 3.4 16 3.4z"/>
+  <ellipse cx="12.7" cy="18.2" rx="1.8" ry="3.1" fill="#e8f4f6"/>
+</svg>

@@ -1,0 +1,32 @@
+{
+  "presets": [
+    {
+      "name": "Muse Spark Open",
+      "provider": "OpenRouter",
+      "baseUrl": "https://openrouter.ai/api/v1",
+      "model": "meta/muse-spark-open",
+      "notes": "Strong agentic/coding model. Requires OpenRouter key. Paid (~$1.25/$4.25 per 1M)."
+    },
+    {
+      "name": "Venice Uncensored (free)",
+      "provider": "OpenRouter",
+      "baseUrl": "https://openrouter.ai/api/v1",
+      "model": "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
+      "notes": "Free uncensored model. Low refusal rate, good for coding and unrestricted tasks. 33k context."
+    },
+    {
+      "name": "North Mini Code (free)",
+      "provider": "OpenRouter",
+      "baseUrl": "https://openrouter.ai/api/v1",
+      "model": "cohere/north-mini-code:free",
+      "notes": "Free agentic coding model. Strong for terminal and multi-step coding."
+    },
+    {
+      "name": "Laguna S 2.1 (free)",
+      "provider": "OpenRouter",
+      "baseUrl": "https://openrouter.ai/api/v1",
+      "model": "poolside/laguna-s-2.1:free",
+      "notes": "Free coding agent model. Free until ~Oct 31 2026."
+    }
+  ]
+}
